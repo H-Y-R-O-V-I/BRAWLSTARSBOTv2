@@ -1,9 +1,8 @@
 from threading import Thread, Lock
-from time import time
+from time import time, sleep
 import cv2 as cv
 from settings import Settings
 from ultralytics import YOLO
-import numpy as np
 
 class Detection:
     # threading properties
@@ -225,3 +224,4 @@ class Detection:
                     self.avg_fps = self.fps
                 else:
                     self.avg_fps = (self.avg_fps*self.count+self.fps)/(self.count + 1)
+            sleep(0.1)
