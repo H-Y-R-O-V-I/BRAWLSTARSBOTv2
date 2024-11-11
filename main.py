@@ -14,7 +14,6 @@ def stop_all_thread(wincap,screendetect,bot,detector):
     stop all thread from running
     """
     py.mouseUp(button = Settings.movement_key)
-    wincap.stop()
     detector.stop()
     screendetect.stop()
     bot.stop()
@@ -35,7 +34,7 @@ def main():
     wincap.focus_window()
 
     # initialize detection class
-    detector = Detection(windowSize,Settings.model_file_path,Settings.classes)
+    detector = Detection(wincap,Settings.model_file_path,Settings.classes)
     # initialize screendectect class
     screendetect = Screendetect(windowSize,wincap.offsets)
     # initialize bot class
@@ -47,7 +46,7 @@ def main():
 
     #start thread
     detector.start()
-    # screendetect.start()
+    screendetect.start()
     
     print(f"Resolution: {wincap.screen_resolution}")
     print(f"Window Size: {windowSize}")
@@ -58,8 +57,9 @@ def main():
         print(bcolors.WARNING + "Please make sure to disable ads on bluestack and close the right sidebar for the bot to work as intended." + bcolors.ENDC)
 
     while True:
-        screenshot = wincap.screenshot
+        screenshot = detector.screenshot
         if screenshot is None:
+            sleep(1)
             continue
         # update screenshot for dectector
         detector.update(screenshot)
