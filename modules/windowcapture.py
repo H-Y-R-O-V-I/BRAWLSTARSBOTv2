@@ -60,7 +60,7 @@ class WindowCapture:
         else:
             self.hwnd = win32gui.FindWindow(None, window_name)
             if not self.hwnd:
-                raise Exception(f"{window_name} not found. Please open {window_name} or change the window_name at settings.py")
+                raise Exception(f"{window_name} not found. Please open {window_name} or change the window_name at config.ini")
 
         # get the window size
         window_rect = win32gui.GetWindowRect(self.hwnd)

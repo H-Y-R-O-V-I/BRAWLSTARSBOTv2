@@ -33,7 +33,7 @@ class Settings:
     configParser = configparser.ConfigParser()
     configParser.read('config.ini')
     config = parse_config_file(configParser)['Default']
-
+    
     #! Brawler's stats
     brawlerName = config['brawler_name']
     
@@ -67,11 +67,11 @@ class Settings:
     print("")
 
     # find brawler in the json 
-    brawlerStats = brawlerStatsDict.get('brawlerName')
+    brawlerStats = brawlerStatsDict.get(brawlerName)
     if brawlerStats is not None:
         print(bcolors.WARNING + f"Selected Brawler: {brawlerName}" + bcolors.ENDC)
     else: 
-        invalidBrawlerString = f"Invalid Brawler name in settings.py! (Case Sensitive)\nYou mean this?\n"
+        invalidBrawlerString = f"Invalid Brawler name in config.ini! (Case Sensitive)\nYou mean this?\n"
         brawlersNameList = [key for key in brawlerStatsDict]
         for name in brawlersNameList:
             if name[0].lower() == brawlerName[0].lower():
