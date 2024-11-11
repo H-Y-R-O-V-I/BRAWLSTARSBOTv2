@@ -1,45 +1,56 @@
 import json
+import configparser
 from modules.print import bcolors
 brawlerStatsDict = json.load(open("brawler_stats.json"))
 
+
+def parse_config_file(config:  list[str]):
+    config_dict = {}
+
+    for section in config.sections():
+        section_data = {}
+        for key, value in config[section].items():
+            if value.lower() == "true":
+                section_data[key] = True
+            elif value.lower() == "false":
+                section_data[key] = False
+            elif value.lower() == "none":
+                section_data[key] = None
+            else:
+                try:
+                    section_data[key] = int(value)
+                except ValueError:
+                    try:
+                        section_data[key] = float(value)
+                    except ValueError:
+                        section_data[key] = value
+        config_dict[section] = section_data
+
+    return config_dict
+
+
 class Settings:
-    #! Brawler's stats
-    """
-    change the brawler_name to the one you are using,
-    follows https://pixelcrux.com/Brawl_Stars/Brawlers/# naming convention
-    e.g "8-bit" or "Larry & Lawrie"
-    """
+    configParser = configparser.ConfigParser()
+    configParser.read('config.ini')
+    config = parse_config_file(configParser)['Default']
     
-    brawlerName = "Bibi"
+    #! Brawler's stats
+    brawlerName = config['brawler_name']
     
     #! Map's characteristics
-    """
-    Change this to suit the current map
-    If the map have a lots of walls make sharpCorner True otherwise make it False
-    If the brawler spawn in the middle of the map make centerOrder False otherwise make it True
-    """
-    sharpCorner = True
-    centerOrder = True
+    sharpCorner = config['sharp_corner']
+    centerOrder = config['center_order']
     
     #! Window Capture
-    """
-    If you have multiple instance of bluestacks or you got
-    "Bluestacks App Player not found". Please change the window
-    name to name located on the top left corner of your bluestacks
-    eg. Bluestacks App Player 1, Bluestacks App Player 2, etc
-    """
-    window_name = "Bluestacks App Player"
+    window_name = config['window_name']
     # Make this False if detection_test is outputting a blank screen, otherwise True.
-    focused_window = True
+    focused_window = config['focused_window']
 
     #! Change this to True if you have Nvidia graphics card and CUDA installed
-    nvidia_gpu = None
+    nvidia_gpu = config['nvidia_gpu']
 
     # Main contants
-    """
-    Generate a second window with detection annotated
-    """
-    DEBUG = True
+    DEBUG = config['debug']
 
     #! Do not change these
     # Detector constants
@@ -56,11 +67,11 @@ class Settings:
     print("")
 
     # find brawler in the json 
-    try:
-        brawlerStats = brawlerStatsDict[brawlerName]
-        invalidBrawlerString = f"Selected Brawler: {brawlerName}"
-    except KeyError:
-        invalidBrawlerString = f"Invalid Brawler name in settings.py! (Case Sensitive)\nYou mean this?\n"
+    brawlerStats = brawlerStatsDict.get(brawlerName)
+    if brawlerStats is not None:
+        print(bcolors.WARNING + f"Selected Brawler: {brawlerName}" + bcolors.ENDC)
+    else: 
+        invalidBrawlerString = f"Invalid Brawler name in config.ini! (Case Sensitive)\nYou mean this?\n"
         brawlersNameList = [key for key in brawlerStatsDict]
         for name in brawlersNameList:
             if name[0].lower() == brawlerName[0].lower():

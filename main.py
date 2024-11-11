@@ -127,7 +127,7 @@ if __name__ == "__main__":
     print(bcolors.HEADER + bcolors.BOLD +
               "Before starting the bot, make sure you have Brawl Stars open \non Bluestacks and selected solo showdown gamemode.")
     print("")
-    print("Enter the name of the brawler you are using to \"brawlerName\" in settings.py.")
+    print("Enter the name of the brawler you are using to \"brawlerName\" in config.ini.")
     print("To exit bot hover cursor to the top left or bottom right corner.")
     print("")
     print(bcolors.UNDERLINE + "IMPORTANT - make sure to disable ads on bluestack and close the right sidebar" + bcolors.ENDC)
