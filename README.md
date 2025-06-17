@@ -37,13 +37,13 @@ git clone https://github.com/H-Y-R-O-V-I/BRAWLSTARSBOTv2.git
 ```
 2. Install the required library
 ```
-cd BrawlStarsBot
+cd BRAWLSTARSBOTv2
 pip install -r requirements.txt
 ```
 [Writing instruction](https://github.com/Jooi025/BrawlStarsBot/blob/main/misc/textInstruction.md)
 ### Update Repo 
 ```
-cd BrawlStarsBot
+cd BRAWLSTARSBOTv2
 git pull
 ```
  ## Improvement to be made
