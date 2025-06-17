@@ -567,16 +567,28 @@ class Brawlbot:
     def run(self):
         while not self.stopped:
             sleep(0.01)
-            if not hasattr(self, "last_g_press"):
-                self.last_g_press = time()
-            # Alle 3 Sekunden Taste "g" drücken, solange der Bot im Spiel ist
-            if self.state in [BotState.MOVING, BotState.ATTACKING, BotState.HIDING]:
-                now = time()
-                if now - self.last_g_press >= 3:
+                    # Initialisiere Timestamps nur beim ersten Schleifendurchlauf
+        if not hasattr(self, "game_enter_time"):
+            self.game_enter_time = None
+        if not hasattr(self, "last_g_press"):
+            self.last_g_press = time()
+
+        # Prüfe, ob der Bot im Spiel ist
+        if self.state in [BotState.MOVING, BotState.ATTACKING, BotState.HIDING]:
+            # Wenn wir gerade neu ins Spiel gekommen sind
+            if self.game_enter_time is None:
+                self.game_enter_time = time()
+                self.last_g_press = time()  # Reset G-Timer
+
+            # Warten, bis 10 Sekunden vergangen sind
+            if time() - self.game_enter_time >= 10:
+                if time() - self.last_g_press >= 3:
                     py.press("g")
                     print("Pressed g")
-                    self.last_g_press = now
-            # ... restlicher Bot-Code ...
+                    self.last_g_press = time()
+        else:
+            # Wenn wir nicht mehr im Spiel sind, Timer zurücksetzen
+            self.game_enter_time = None
             if self.state == BotState.INITIALIZING:
                 # do no bot actions until the startup waiting period is complete
                 if time() > self.timestamp + self.INITIALIZING_SECONDS:
