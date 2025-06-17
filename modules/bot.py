@@ -562,9 +562,21 @@ class Brawlbot:
         # reset last player position
         self.last_player_pos = None
 
+
+
     def run(self):
         while not self.stopped:
             sleep(0.01)
+            if not hasattr(self, "last_g_press"):
+                self.last_g_press = time()
+            # Alle 3 Sekunden Taste "g" drücken, solange der Bot im Spiel ist
+            if self.state in [BotState.MOVING, BotState.ATTACKING, BotState.HIDING]:
+                now = time()
+                if now - self.last_g_press >= 3:
+                    py.press("g")
+                    print("Pressed g")
+                    self.last_g_press = now
+            # ... restlicher Bot-Code ...
             if self.state == BotState.INITIALIZING:
                 # do no bot actions until the startup waiting period is complete
                 if time() > self.timestamp + self.INITIALIZING_SECONDS:
